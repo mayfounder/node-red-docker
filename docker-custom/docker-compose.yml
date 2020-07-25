@@ -8,4 +8,6 @@ services:
     network_mode: host
     environment:
       - TZ=America/Los_Angeles
-      - "DEBUG=nightmare"
+      - DEBUG=nightmare
+    volumes:
+          - "./data:/data"
