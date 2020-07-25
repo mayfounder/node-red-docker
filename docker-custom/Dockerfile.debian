@@ -12,6 +12,7 @@ COPY scripts/*.sh /tmp/
 RUN set -ex && \
     apt-get update && \
     apt-get -y install \
+	apt-utils \
         bash \
         tzdata \
         iputils-arping \
@@ -42,7 +43,7 @@ FROM base AS build
 
 RUN apt-get update
 # Install Build tools
-RUN apt-get -y install linux-libc-dev udev python && \
+RUN apt-get -y install g++ make binutils linux-libc-dev udev python && \
     npm install --unsafe-perm --no-update-notifier --no-fund --only=production && \
     /tmp/remove_native_gpio.sh && \
     cp -R node_modules prod_node_modules
@@ -75,6 +76,9 @@ COPY --from=build /usr/src/node-red/prod_node_modules ./node_modules
 RUN chown -R node-red:root /usr/src/node-red && \
     /tmp/install_devtools.sh && \
     rm -r /tmp/*
+
+# These are for running electron
+RUN apt-get -y install libgtk2.0-0 libgconf-2-4 libnss3 libasound2 xvfb x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic libnotify4 libxss1
 
 USER node-red
 

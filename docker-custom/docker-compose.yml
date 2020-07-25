@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  node-red:
+    restart: always
+    image: testing:node-red-build
+    container_name: node-red-test
+    network_mode: host
+    environment:
+      - TZ=America/Los_Angeles
+      - "DEBUG=nightmare"
