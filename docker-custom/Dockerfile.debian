@@ -99,4 +99,11 @@ EXPOSE 1880
 # Add a healthcheck (default every 30 secs)
 # HEALTHCHECK CMD curl http://localhost:1880/ || exit 1
 
-ENTRYPOINT ["xvfb-run", "-a", "--server-args=\"-screen 0 1366x768x24\"", "npm", "start", "--cache", "/data/.npm", "--", "--userDir", "/data"]
+USER root
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+USER node-red
+
+ENV DEBUG=nightmare
+CMD ["npm", "start", "--cache", "/data/.npm", "--", "--userDir", "/data"]
